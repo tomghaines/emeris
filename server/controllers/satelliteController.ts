@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getTLEs } from '../services/satelliteService';
+import { getTLEs } from '../services/apiService';
 
 export const getSatellites = async (req: Request, res: Response) => {
   try {

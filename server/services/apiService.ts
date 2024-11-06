@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { convertTLEData } from './testservice';
+import { convertTLEData } from './satelliteService';
 
 interface Satellite {
   satelliteId: number;
