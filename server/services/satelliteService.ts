@@ -1,4 +1,5 @@
 import axios from 'axios';
+import satellite, { EciVec3, PositionAndVelocity } from 'satellite.js';
 
 export const getTLEs = async () => {
   try {
