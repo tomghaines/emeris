@@ -1,5 +1,9 @@
 const Map = () => {
-  return <div>This is the map</div>;
+  return (
+    <div>
+      <div className="h-2/4">This is the map</div>
+    </div>
+  );
 };
 
 export default Map;

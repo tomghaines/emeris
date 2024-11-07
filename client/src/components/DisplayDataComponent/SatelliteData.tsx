@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getSatelliteData } from '../../services/satelliteAPI';
+import TableCol from './TableCol';
 
 interface Satellite {
   satelliteId: number;
@@ -63,12 +64,60 @@ const mockData: Satellite[] = [
     rangeSat: 0,
     doppler: 0,
   },
+  {
+    satelliteId: 43694,
+    name: 'PROXIMA I',
+    date: '2024-05-18T00:08:26+00:00',
+    longitudeDeg: 0,
+    latitudeDeg: 0,
+    height: 0,
+    azimuth: 0,
+    elevation: 0,
+    rangeSat: 0,
+    doppler: 0,
+  },
+  {
+    satelliteId: 43694,
+    name: 'PROXIMA I',
+    date: '2024-05-18T00:08:26+00:00',
+    longitudeDeg: 0,
+    latitudeDeg: 0,
+    height: 0,
+    azimuth: 0,
+    elevation: 0,
+    rangeSat: 0,
+    doppler: 0,
+  },
+  {
+    satelliteId: 43694,
+    name: 'PROXIMA I',
+    date: '2024-05-18T00:08:26+00:00',
+    longitudeDeg: 0,
+    latitudeDeg: 0,
+    height: 0,
+    azimuth: 0,
+    elevation: 0,
+    rangeSat: 0,
+    doppler: 0,
+  },
+  {
+    satelliteId: 43694,
+    name: 'PROXIMA I',
+    date: '2024-05-18T00:08:26+00:00',
+    longitudeDeg: 0,
+    latitudeDeg: 0,
+    height: 0,
+    azimuth: 0,
+    elevation: 0,
+    rangeSat: 0,
+    doppler: 0,
+  },
 ];
 
 const SatelliteData = () => {
   const [satelliteData, setSateliteData] = useState<Satellite[]>([]);
   const [loading, setLoading] = useState(true);
-  const useMockData = true; // ! Change here to switch between api and mock data
+  const useMockData = true; // ! Change to switch data source
 
   useEffect(() => {
     const fetchDataFromService = async () => {
@@ -97,23 +146,44 @@ const SatelliteData = () => {
     fetchDataFromService();
   }, [useMockData]);
 
-  if (loading) return <p>Loading data</p>;
+  if (loading)
+    return (
+      <div className="flex items-center justify-center">
+        <p className="font-bold text-center text-large">Loading data</p>
+      </div>
+    );
+
+  const tableHeaders: string[] = [
+    'NAME',
+    'ID',
+    'DATE',
+    'LATITUDE',
+    'LONGITUDE',
+    'HEIGHT',
+    'ELEVATION',
+    'DOPPLER',
+    'AZIMUTH',
+    'RANGE',
+  ];
 
   return (
-    <div>
+    <div className="w-full flex flex-col bg-slate-900 justify-center p-2">
+      <div className="flex flex-row text-white">
+        {tableHeaders.map((header) => {
+          return <TableCol key={header} type="header" data={header} />;
+        })}
+      </div>
+
       {satelliteData.length > 0 ? (
         satelliteData.map((satellite: Satellite) => (
-          <div key={satellite.satelliteId}>
-            <h3>Name: {satellite.name}</h3>
-            <p>ID: {satellite.satelliteId}</p>
-            <p>Date: {satellite.date}</p>
-            <p>Longitude: {satellite.longitudeDeg}</p>
-            <p>Latitude: {satellite.latitudeDeg}</p>
-            <p>Height: {satellite.height}</p>
-            <p>Elevation: {satellite.elevation}</p>
-            <p>Doppler Factor: {satellite.doppler}</p>
-            <p>Azimuth: {satellite.azimuth}</p>
-            <p>Range: {satellite.rangeSat}</p>
+          <div key={satellite.satelliteId} className="flex flex-row text-white">
+            {Object.values(satellite).map((value, index) => (
+              <TableCol
+                key={`${satellite.satelliteId}-${index}`}
+                type="data"
+                data={value.toString()}
+              />
+            ))}
           </div>
         ))
       ) : (

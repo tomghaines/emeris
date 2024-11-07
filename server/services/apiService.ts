@@ -9,19 +9,6 @@ interface Satellite {
   line2: string;
 }
 
-interface SatelliteInfo {
-  satelliteId: number;
-  name: string;
-  date: string;
-  longitudeDeg: number;
-  latitudeDeg: number;
-  height: number;
-  azimuth: number;
-  elevation: number;
-  rangeSat: number;
-  doppler: number;
-}
-
 export const getTLEs = async () => {
   try {
     const response = await axios.get<{ member: Satellite[] }>(
