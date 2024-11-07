@@ -20,30 +20,30 @@ interface Satellite {
 const mockData = MockData;
 
 const SatelliteData = () => {
-  const [satelliteData, setSateliteData] = useState<Satellite[]>([]);
+  const [satelliteData, setSatelliteData] = useState<Satellite[]>([]);
   const [loading, setLoading] = useState(true);
-  const useMockData = true; // ! Change to switch data source
+  const useMockData = false; // ! Change to switch data source
 
   useEffect(() => {
     const fetchDataFromService = async () => {
       setLoading(true);
 
       if (useMockData) {
-        setSateliteData(mockData);
+        setSatelliteData(mockData);
         setLoading(false);
       } else {
         try {
           const response = await getSatelliteData();
           if (response?.data) {
-            setSateliteData(response.data);
+            setSatelliteData(response.data);
             setLoading(false);
           } else {
-            setSateliteData([]);
+            setSatelliteData([]);
             setLoading(false);
           }
         } catch (err) {
           console.error('Error fetching satellite data:', err);
-          setSateliteData([]);
+          setSatelliteData([]);
           setLoading(true);
         }
       }
