@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { format } from 'date-fns';
 import { convertTLEData } from './satelliteService';
 
 interface Satellite {
@@ -30,7 +31,7 @@ export const getTLEs = async () => {
       return {
         satelliteId: satellite.satelliteId,
         name: satellite.name,
-        date: satellite.date,
+        date: format(satellite.date, 'dd-MM-yyyy'),
         ...satelliteInfo,
       };
     });
