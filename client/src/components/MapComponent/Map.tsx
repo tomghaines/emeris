@@ -9,21 +9,20 @@ import { MockData } from '../../services/mockData';
 const mockData = MockData;
 
 const Map = () => {
+  const [satellites, setSatellites] = useState(mockData);
   const [mapKey, setMapKey] = useState<string | null>(null);
 
   useEffect(() => {
     setMapKey(import.meta.env.VITE_MAPTILER_API_KEY);
   }, []);
 
-  const markers = [
-    { geocode: [35.6844, 139.753], popUp: 'Tokyo' },
-    { geocode: [48.8566, 2.3522], popUp: 'Paris' },
-    { geocode: [51.5074, -0.1278], popUp: 'London' },
-  ];
+  // const updateSatellites = (newData: typeof mockData) => {
+  //   setSatellites(newData);
+  // };
 
   const center: LatLngExpression = [0, 0];
-  const zoom = 3;
-  const minZoom = 3;
+  const zoom = 2;
+  const minZoom = 2;
   const maxZoom = 12;
 
   if (!mapKey) return <div>Map Loading</div>;
@@ -42,9 +41,12 @@ const Map = () => {
         tileSize={256}
       />
 
-      {markers.map((marker, index) => (
-        <Marker key={index} position={marker.geocode}>
-          <Popup>{marker.popUp}</Popup>
+      {satellites.map((satellite) => (
+        <Marker
+          key={satellite.satelliteId}
+          position={[satellite.latitudeDeg, satellite.longitudeDeg]}
+        >
+          <Popup></Popup>
         </Marker>
       ))}
     </MapContainer>
