@@ -1,9 +1,7 @@
+import { MapContainer } from 'react-leaflet';
+
 const Map = () => {
-  return (
-    <div>
-      <div className="h-2/4">This is the map</div>
-    </div>
-  );
+  return <MapContainer center={[48.8566, 2.3522]} zoom={10}></MapContainer>; // change these coords to centre of map
 };
 
 export default Map;
