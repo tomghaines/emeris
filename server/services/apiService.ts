@@ -10,6 +10,9 @@ interface Satellite {
 }
 
 interface SatelliteInfo {
+  satelliteId: number;
+  name: string;
+  date: string;
   longitudeDeg: number;
   latitudeDeg: number;
   height: number;

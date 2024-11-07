@@ -2,18 +2,35 @@ import { useEffect, useState } from 'react';
 import { getSatelliteData } from '../../services/satelliteAPI';
 
 const SatelliteData = () => {
-  const [satelliteData, setSateliteData] = useState(null);
+  interface Satellite {
+    satelliteId: number;
+    name: string;
+    date: string;
+    longitudeDeg: number;
+    latitudeDeg: number;
+    height: number;
+    azimuth: number;
+    elevation: number;
+    rangeSat: number;
+    doppler: number;
+  }
+  const [satelliteData, setSateliteData] = useState<Satellite[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchDataFromService = async () => {
       try {
         const response = await getSatelliteData();
-        console.log(response.data);
-        setSateliteData(response.data);
-        setLoading(false);
+        if (response?.data) {
+          setSateliteData(response.data);
+          setLoading(false);
+        } else {
+          setSateliteData([]);
+          setLoading(false);
+        }
       } catch (err) {
-        console.error('Error fetching satellite data from the service', err);
+        console.error('Error fetching satellite data:', err);
+        setSateliteData([]);
         setLoading(true);
       }
     };
@@ -24,8 +41,8 @@ const SatelliteData = () => {
 
   return (
     <div>
-      {satelliteData &&
-        satelliteData.map((satellite) => (
+      {satelliteData.length > 0 ? (
+        satelliteData.map((satellite: Satellite) => (
           <div key={satellite.satelliteId}>
             <h3>Name: {satellite.name}</h3>
             <p>ID: {satellite.satelliteId}</p>
@@ -38,7 +55,10 @@ const SatelliteData = () => {
             <p>Azimuth: {satellite.azimuth}</p>
             <p>Range: {satellite.rangeSat}</p>
           </div>
-        ))}
+        ))
+      ) : (
+        <p>No data to display</p>
+      )}
     </div>
   );
 };
