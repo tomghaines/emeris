@@ -18,7 +18,7 @@ export const getTLEs = async () => {
 
     const data = response.data.member.map((satellite) => {
       const { line1, line2, satelliteId, name, date } = satellite;
-      let satelliteInfo = {};
+      let satelliteInfo: object | null = null;
       try {
         satelliteInfo = convertTLEData(line1, line2);
       } catch (err) {
@@ -28,10 +28,12 @@ export const getTLEs = async () => {
         );
         return { satelliteId, name, date, err: 'SGP4 calculation failed' };
       }
+
+      const fmtDate = format(new Date(date), 'dd-MM-yyyy');
       return {
         satelliteId: satellite.satelliteId,
         name: satellite.name,
-        date: format(satellite.date, 'dd-MM-yyyy'),
+        date: fmtDate,
         ...satelliteInfo,
       };
     });
