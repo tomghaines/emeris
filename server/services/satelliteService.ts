@@ -23,9 +23,7 @@ import {
 export const convertTLEData = (
   tleLineOne: string,
   tleLineTwo: string
-): object => {
-  let result: object = {};
-
+): object | null => {
   // New satellite record
   const satrec = twoline2satrec(tleLineOne, tleLineTwo);
 
@@ -69,6 +67,7 @@ export const convertTLEData = (
 
   if (!positionAndVelocity.position || !positionAndVelocity.velocity) {
     console.error('Error: sgp4 calculation failed', positionAndVelocity);
+    return null;
   } else {
     const positionECI = positionAndVelocity.position as EciVec3<number>;
     const velocityECI = positionAndVelocity.velocity as EciVec3<number>;
@@ -114,7 +113,7 @@ export const convertTLEData = (
     // console.log('Range (km):', rangeSat);
     // console.log('Doppler Factor:', doppler);
 
-    result = {
+    return {
       latitudeDeg: parseFloat(latitudeDeg.toFixed(3)),
       longitudeDeg: parseFloat(longitudeDeg.toFixed(3)),
       height: parseFloat(height.toFixed(3)),
@@ -125,7 +124,6 @@ export const convertTLEData = (
     };
   }
   // console.log(result);
-  return result;
 };
 
 // convertTLEData(lineOne, lineTwo);
