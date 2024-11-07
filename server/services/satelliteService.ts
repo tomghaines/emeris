@@ -115,16 +115,16 @@ export const convertTLEData = (
     // console.log('Doppler Factor:', doppler);
 
     result = {
-      longitudeDeg: longitudeDeg,
-      latitudeDeg: latitudeDeg,
-      height: height,
-      azimuth: azimuth,
-      elevation: elevation,
-      rangeSat: rangeSat,
-      doppler: doppler,
+      latitudeDeg: parseFloat(latitudeDeg.toFixed(3)),
+      longitudeDeg: parseFloat(longitudeDeg.toFixed(3)),
+      height: parseFloat(height.toFixed(3)),
+      elevation: parseFloat(elevation.toFixed(3)),
+      doppler: parseFloat(doppler.toFixed(3)),
+      azimuth: parseFloat(azimuth.toFixed(3)),
+      rangeSat: parseFloat(rangeSat.toFixed(3)),
     };
   }
-  console.log(result);
+  // console.log(result);
   return result;
 };
 
