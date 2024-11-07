@@ -1,34 +1,54 @@
-import 'leaflet/dist/leaflet.css';
+import { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
-import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import { LatLngExpression } from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import './map.css';
+import { MockData } from '../../services/mockData';
+
+const mockData = MockData;
 
 const Map = () => {
+  const [mapKey, setMapKey] = useState<string | null>(null);
+
+  useEffect(() => {
+    setMapKey(import.meta.env.VITE_MAPTILER_API_KEY);
+  }, []);
+
   const markers = [
-    {
-      geocode: [-12.183, 60.169],
-      popUp: 'popup',
-    },
-    {
-      geocode: [48.98, -30.787],
-      popUp: 'popup',
-    },
-    {
-      geocode: [-15.255, -14.047],
-      popUp: 'popup',
-    },
+    { geocode: [35.6844, 139.753], popUp: 'Tokyo' },
+    { geocode: [48.8566, 2.3522], popUp: 'Paris' },
+    { geocode: [51.5074, -0.1278], popUp: 'London' },
   ];
 
+  const center: LatLngExpression = [0, 0];
+  const zoom = 3;
+  const minZoom = 3;
+  const maxZoom = 12;
+
+  if (!mapKey) return <div>Map Loading</div>;
+
   return (
-    <MapContainer center={[48.8566, 2.3522]} zoom={2}>
+    <MapContainer
+      center={center}
+      zoom={zoom}
+      minZoom={minZoom}
+      maxZoom={maxZoom}
+      style={{ height: '100%', width: '100%' }}
+    >
       <TileLayer
+        url={`https://api.maptiler.com/maps/backdrop-dark/{z}/{x}/{y}.png?key=${mapKey}`}
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url={'https://tile.openstreetmap.org/{z}/{x}/{y}.png'}
+        tileSize={256}
       />
-      {markers.map((marker) => (
-        <Marker position={marker.geocode}></Marker>
+
+      {markers.map((marker, index) => (
+        <Marker key={index} position={marker.geocode}>
+          <Popup>{marker.popUp}</Popup>
+        </Marker>
       ))}
     </MapContainer>
-  ); // change these coords to centre of map
+  );
 };
 
 export default Map;
