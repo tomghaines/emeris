@@ -1,10 +1,13 @@
 import './App.css';
+import Map from './components/MapComponent/Map';
+import SatelliteData from './components/DisplayDataComponent/SatelliteData';
 
 function App() {
   return (
     <>
       <div>
-        <h1>emeris</h1>
+        <Map />
+        <SatelliteData />
       </div>
     </>
   );
