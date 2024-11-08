@@ -30,8 +30,8 @@ const Map: React.FC<MapProps> = ({
   selectedSatelliteId,
   onSatelliteSelect,
 }) => {
-  const center: LatLngExpression = [0, 0];
-  const zoom = 3;
+  const center: LatLngExpression = [25, 0];
+  const zoom = 2;
   const minZoom = 2;
   const maxZoom = 12;
 
