@@ -47,28 +47,37 @@ const MainTable: React.FC<SatalliteProps> = ({ satelliteData, loading }) => {
   );
 
   return (
-    <div className="w-full flex flex-col bg-slate-900 justify-center p-2">
-      <div className="flex flex-row text-white">
-        {tableHeaders.map((header) => {
-          return <TableCol key={header} type="header" data={header} />;
-        })}
+    <div id="table" className="w-full flex flex-col p-4 items-start gap-2">
+      <div
+        id="table-header"
+        className="flex justify-between items-center self-stretch rounded-md bg-neutral-900"
+      >
+        {tableHeaders.map((header) => (
+          <TableCol key={header} type="header" data={header} />
+        ))}
       </div>
 
-      {filteredSatellites.length > 0 ? (
-        filteredSatellites.map((satellite: Satellite) => (
-          <div key={satellite.satelliteId} className="flex flex-row text-white">
-            {Object.values(satellite).map((value, index) => (
-              <TableCol
-                key={`${satellite.satelliteId}-${index}`}
-                type="data"
-                data={value.toString()}
-              />
-            ))}
-          </div>
-        ))
-      ) : (
-        <p>No data to display</p>
-      )}
+      <div className="table-body overflow-y-auto max-h-64 w-full">
+        {filteredSatellites.length > 0 ? (
+          filteredSatellites.map((satellite: Satellite) => (
+            <div
+              key={satellite.satelliteId}
+              id="table-row"
+              className="flex justify-between items-center self-stretch rounded-md bg-neutral-950"
+            >
+              {Object.values(satellite).map((value, index) => (
+                <TableCol
+                  key={`${satellite.satelliteId}-${index}`}
+                  type="data"
+                  data={value.toString()}
+                />
+              ))}
+            </div>
+          ))
+        ) : (
+          <p>No data to display</p>
+        )}
+      </div>
     </div>
   );
 };

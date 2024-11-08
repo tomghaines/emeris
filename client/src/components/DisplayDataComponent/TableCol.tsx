@@ -5,8 +5,22 @@ interface Prop {
 
 const TableCol = (props: Prop) => {
   return (
-    <div className="flex flex-col w-full">
-      <p className={props.type === 'header' ? 'font-bold pb-2' : 'pt-1'}>
+    <div
+      id="table-cell"
+      className={
+        props.type === 'header'
+          ? 'w-full flex flex-col items-start gap-3 py-3 px-2'
+          : 'w-full flex flex-col items-start gap-3 py-3 px-2 border-b-2 border-neutral-800'
+      }
+    >
+      <p
+        id="cell-text"
+        className={
+          props.type === 'header'
+            ? 'text-xs font-semibold leading-5 uppercase text-neutral-400'
+            : 'text-sm font-normal leading-5 text-neutral-300'
+        }
+      >
         {props.data}
       </p>
     </div>

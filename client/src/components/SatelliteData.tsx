@@ -40,11 +40,11 @@ const SatelliteData = () => {
     fetchDataFromService();
   }, [useMockData]);
   return (
-    <div className="h-screen overflow-hidden">
+    <div className="h-screen">
       <div className="h-3/4">
         <Map satelliteData={satelliteData} loading={loading} />
       </div>
-      <div className="h-1/4 overflow-scroll w-full">
+      <div className="h-1/4 overflow-hidden w-full bg-neutral-950">
         <MainTable satelliteData={satelliteData} loading={loading} />
       </div>
     </div>
