@@ -1,7 +1,8 @@
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { LatLngExpression } from 'leaflet';
 import './map.css';
 import 'leaflet/dist/leaflet.css';
+import { useEffect } from 'react';
 
 interface Satellite {
   satelliteId: number;
@@ -19,11 +20,18 @@ interface Satellite {
 interface MapProps {
   satelliteData: Satellite[];
   loading: boolean;
+  selectedSatelliteId: number | null;
+  onSatelliteSelect: (id: number | null) => void;
 }
 
-const Map: React.FC<MapProps> = ({ satelliteData, loading }) => {
+const Map: React.FC<MapProps> = ({
+  satelliteData,
+  loading,
+  selectedSatelliteId,
+  onSatelliteSelect,
+}) => {
   const center: LatLngExpression = [0, 0];
-  const zoom = 2;
+  const zoom = 3;
   const minZoom = 2;
   const maxZoom = 12;
 
@@ -37,6 +45,27 @@ const Map: React.FC<MapProps> = ({ satelliteData, loading }) => {
       satellite.longitudeDeg !== undefined
   );
 
+  // Handle centering the map on a selected satellite
+  const CenterMapOnSelectedSatellite = () => {
+    const map = useMap();
+
+    useEffect(() => {
+      if (selectedSatelliteId !== null) {
+        const selectedSatellite = filteredSatellites.find(
+          (sat) => sat.satelliteId === selectedSatelliteId
+        );
+        if (selectedSatellite) {
+          map.setView(
+            [selectedSatellite.latitudeDeg, selectedSatellite.longitudeDeg],
+            3
+          );
+        }
+      }
+    });
+
+    return null; // Doesn’t render anything on the map
+  };
+
   return (
     <MapContainer
       center={center}
@@ -46,6 +75,7 @@ const Map: React.FC<MapProps> = ({ satelliteData, loading }) => {
       style={{ height: '100%', width: '100%' }}
       zoomControl={false}
     >
+      <CenterMapOnSelectedSatellite />
       <TileLayer
         url={`https://api.maptiler.com/maps/backdrop-dark/{z}/{x}/{y}.png?key=${mapKey}`}
         attribution="&copy; MapTiler &copy; OpenStreetMap contributors"
@@ -55,7 +85,13 @@ const Map: React.FC<MapProps> = ({ satelliteData, loading }) => {
 
         if (latitudeDeg !== undefined && longitudeDeg !== undefined) {
           return (
-            <Marker key={satelliteId} position={[latitudeDeg, longitudeDeg]}>
+            <Marker
+              key={satelliteId}
+              position={[latitudeDeg, longitudeDeg]}
+              eventHandlers={{
+                click: () => onSatelliteSelect(satellite.satelliteId),
+              }}
+            >
               <Popup>
                 <div>
                   <strong>{satellite.name}</strong>

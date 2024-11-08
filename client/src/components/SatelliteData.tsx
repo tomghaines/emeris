@@ -19,9 +19,12 @@ interface Satellite {
 }
 
 const SatelliteData = () => {
+  const [selectedSatelliteId, setSelectedSatelliteId] = useState<number | null>(
+    null
+  );
   const [satelliteData, setSatelliteData] = useState<Satellite[]>([]);
   const [loading, setLoading] = useState(true);
-  const useMockData = false; // ! Change to switch data source
+  const useMockData = true; // ! Change to switch data source
 
   useEffect(() => {
     const fetchDataFromService = async () => {
@@ -40,16 +43,27 @@ const SatelliteData = () => {
     };
     fetchDataFromService();
   }, [useMockData]);
+
   return (
     <div className="flex flex-col h-screen">
       <div className="fixed top-0 z-10 w-full">
         <StatusBar satelliteData={satelliteData} loading={loading} />
       </div>
       <div className="h-3/4 z-0">
-        <Map satelliteData={satelliteData} loading={loading} />
+        <Map
+          satelliteData={satelliteData}
+          loading={loading}
+          selectedSatelliteId={selectedSatelliteId}
+          onSatelliteSelect={setSelectedSatelliteId}
+        />
       </div>
       <div className="h-1/4 overflow-hidden w-full">
-        <MainTable satelliteData={satelliteData} loading={loading} />
+        <MainTable
+          satelliteData={satelliteData}
+          loading={loading}
+          selectedSatelliteId={selectedSatelliteId}
+          onSatelliteSelect={setSelectedSatelliteId}
+        />
       </div>
     </div>
   );

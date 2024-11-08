@@ -13,12 +13,19 @@ interface Satellite {
   doppler: number;
 }
 
-interface SatalliteProps {
+interface SatelliteProps {
   satelliteData: Satellite[];
   loading: boolean;
+  selectedSatelliteId: number | null;
+  onSatelliteSelect: (id: number | null) => void;
 }
 
-const MainTable: React.FC<SatalliteProps> = ({ satelliteData, loading }) => {
+const MainTable: React.FC<SatelliteProps> = ({
+  satelliteData,
+  loading,
+  selectedSatelliteId,
+  onSatelliteSelect,
+}) => {
   const tableHeaders: string[] = [
     'NAME',
     'DATE',
@@ -46,14 +53,8 @@ const MainTable: React.FC<SatalliteProps> = ({ satelliteData, loading }) => {
   );
 
   return (
-    <div
-      id="table"
-      className="w-full flex flex-col p-4 items-start gap-2 bg-neutral-950"
-    >
-      <div
-        id="table-header"
-        className="flex justify-between items-center self-stretch rounded-md bg-neutral-900"
-      >
+    <div className="w-full flex flex-col p-4 items-start gap-2 bg-neutral-950">
+      <div className="flex justify-between items-center self-stretch rounded-md bg-neutral-900">
         {tableHeaders.map((header) => (
           <TableCol key={header} type="header" data={header} />
         ))}
@@ -64,8 +65,12 @@ const MainTable: React.FC<SatalliteProps> = ({ satelliteData, loading }) => {
           filteredSatellites.map((satellite: Satellite) => (
             <div
               key={satellite.satelliteId}
-              id="table-row"
-              className="flex justify-between items-center self-stretch rounded-md bg-neutral-950"
+              className={`flex justify-between items-center self-stretch rounded-md bg-neutral-950 ${
+                satellite.satelliteId === selectedSatelliteId
+                  ? 'bg-blue-500' // Add style for selected row
+                  : ''
+              }`}
+              onClick={() => onSatelliteSelect(satellite.satelliteId)}
             >
               {Object.values(satellite).map((value, index) => (
                 <TableCol
