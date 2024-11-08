@@ -14,6 +14,16 @@ import {
   degreesLat,
 } from 'satellite.js';
 
+export interface SatelliteData {
+  latitudeDeg: number;
+  longitudeDeg: number;
+  height: number;
+  elevation: number;
+  doppler: number;
+  azimuth: number;
+  rangeSat: number;
+}
+
 // Sample TLEs
 // const lineOne =
 //   '1 25544U 98067A   19156.50900463  .00003075  00000-0  59442-4 0  9992';
@@ -23,7 +33,7 @@ import {
 export const convertTLEData = (
   tleLineOne: string,
   tleLineTwo: string
-): object | null => {
+): SatelliteData | null => {
   // New satellite record
   const satrec = twoline2satrec(tleLineOne, tleLineTwo);
 
