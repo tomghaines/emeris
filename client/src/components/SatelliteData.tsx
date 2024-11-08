@@ -4,6 +4,7 @@ import Map from './MapComponent/Map';
 import { MockData } from '../services/mockData';
 import { getSatelliteData } from '../services/satelliteAPI';
 import StatusBar from './StatusBar';
+import MainColumn from './MainColumnComponent/MainColumn';
 
 interface Satellite {
   satelliteId: number;
@@ -45,26 +46,29 @@ const SatelliteData = () => {
   }, [useMockData]);
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex">
       <div className="fixed top-0 z-10 w-full">
         <StatusBar satelliteData={satelliteData} loading={loading} />
       </div>
-      <div className="h-3/4 z-0">
-        <Map
-          satelliteData={satelliteData}
-          loading={loading}
-          selectedSatelliteId={selectedSatelliteId}
-          onSatelliteSelect={setSelectedSatelliteId}
-        />
+      <div className="flex flex-col h-screen w-3/4">
+        <div className="h-2/3 z-0">
+          <Map
+            satelliteData={satelliteData}
+            loading={loading}
+            selectedSatelliteId={selectedSatelliteId}
+            onSatelliteSelect={setSelectedSatelliteId}
+          />
+        </div>
+        <div className="h-1/3 overflow-hidden w-full">
+          <MainTable
+            satelliteData={satelliteData}
+            loading={loading}
+            selectedSatelliteId={selectedSatelliteId}
+            onSatelliteSelect={setSelectedSatelliteId}
+          />
+        </div>
       </div>
-      <div className="h-1/4 overflow-hidden w-full">
-        <MainTable
-          satelliteData={satelliteData}
-          loading={loading}
-          selectedSatelliteId={selectedSatelliteId}
-          onSatelliteSelect={setSelectedSatelliteId}
-        />
-      </div>
+      <MainColumn />
     </div>
   );
 };
