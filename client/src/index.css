@@ -26,3 +26,21 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.leaflet-control-attribution {
+  color: #f3f3f38c !important;
+  font-size: 0.65rem;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Leaflet SVG logo */
+.leaflet-control-attribution .leaflet-attribution-flag {
+  width: 0.65rem;
+  height: auto;
+}
+
+/* Link */
+.leaflet-control-attribution a {
+  color: #f3f3f38c !important;
+  text-decoration: none;
+}
