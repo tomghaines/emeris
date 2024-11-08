@@ -44,6 +44,7 @@ const Map: React.FC<MapProps> = ({ satelliteData, loading }) => {
       minZoom={minZoom}
       maxZoom={maxZoom}
       style={{ height: '100%', width: '100%' }}
+      zoomControl={false}
     >
       <TileLayer
         url={`https://api.maptiler.com/maps/backdrop-dark/{z}/{x}/{y}.png?key=${mapKey}`}
