@@ -47,11 +47,11 @@ const SatelliteData = () => {
 
   return (
     <div className="flex">
-      <div className="fixed top-0 z-10 w-full">
+      <div className="border-2 border-neutral-900 fixed top-0 z-10 w-full">
         <StatusBar satelliteData={satelliteData} loading={loading} />
       </div>
       <div className="flex flex-col h-screen w-3/4">
-        <div className="h-2/3 z-0">
+        <div className="border-2 border-neutral-900 h-3/4 z-0">
           <Map
             satelliteData={satelliteData}
             loading={loading}
@@ -59,7 +59,7 @@ const SatelliteData = () => {
             onSatelliteSelect={setSelectedSatelliteId}
           />
         </div>
-        <div className="h-1/3 overflow-hidden w-full">
+        <div className="border-2 border-neutral-900 h-1/4 overflow-hidden w-full">
           <MainTable
             satelliteData={satelliteData}
             loading={loading}
@@ -68,7 +68,9 @@ const SatelliteData = () => {
           />
         </div>
       </div>
-      <MainColumn />
+      <div className="border-2 border-neutral-900 w-1/4">
+        <MainColumn />
+      </div>
     </div>
   );
 };
