@@ -20,7 +20,6 @@ interface SatalliteProps {
 
 const MainTable: React.FC<SatalliteProps> = ({ satelliteData, loading }) => {
   const tableHeaders: string[] = [
-    'ID',
     'NAME',
     'DATE',
     'LATITUDE',
@@ -47,7 +46,10 @@ const MainTable: React.FC<SatalliteProps> = ({ satelliteData, loading }) => {
   );
 
   return (
-    <div id="table" className="w-full flex flex-col p-4 items-start gap-2">
+    <div
+      id="table"
+      className="w-full flex flex-col p-4 items-start gap-2 bg-neutral-950"
+    >
       <div
         id="table-header"
         className="flex justify-between items-center self-stretch rounded-md bg-neutral-900"
