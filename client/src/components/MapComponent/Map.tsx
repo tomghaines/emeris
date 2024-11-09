@@ -15,6 +15,7 @@ interface Satellite {
   elevation: number;
   rangeSat: number;
   doppler: number;
+  lastUpdateTimestamp: string;
 }
 
 interface MapProps {
