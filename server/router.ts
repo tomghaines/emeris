@@ -1,8 +1,11 @@
-import { Router } from 'express';
-import { getSatellites } from './controllers/satelliteController';
+import express from 'express';
+import {
+  getSatellites,
+  updateTLEData,
+} from './controllers/satelliteController';
 
-const router = Router();
-
-router.get('/', getSatellites);
+const router = express.Router();
+router.get('/satellites', getSatellites);
+router.get('/fetch-tle', updateTLEData);
 
 export default router;

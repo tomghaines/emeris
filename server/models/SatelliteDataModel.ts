@@ -13,4 +13,4 @@ const satelliteSchema = new mongoose.Schema({
   doppler: Number,
 });
 
-export default satelliteSchema;
+export default mongoose.model('Satellite', satelliteSchema);

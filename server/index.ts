@@ -1,14 +1,47 @@
 import express from 'express';
-import router from './router';
+import mongoose from 'mongoose';
 import cors from 'cors';
+import router from './router';
+import { fetchAndSaveTLEData } from './services/apiService';
 
-const port = 3000;
 const app = express();
+const port = 3000;
+const mongoUri = 'mongodb://127.0.0.1:27017/satellitesdb';
 
 app.use(cors());
 app.use(express.json());
 app.use(router);
 
-app.listen(port, () => {
-  console.log(`Server is running at: http://localhost:${port}`);
-});
+// ! Use only for development -> manually fetch and save data with: 'curl http://localhost:3000/fetch-tle'
+
+// Connect to MongoDB and start server
+mongoose
+  .connect(mongoUri)
+  .then(() => {
+    console.log('Connected to MongoDB');
+    app.listen(port, () => {
+      console.log(`Server is running at: http://localhost:${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Error connecting to MongoDB:', err);
+  });
+
+// ! Uuse for production -> auto fectching api data:
+
+// // Connect to MongoDB and start server
+// mongoose
+//   .connect(mongoUri)
+//   .then(() => {
+//     console.log('Connected to MongoDB');
+//     app.listen(port, () => {
+//       console.log(`Server is running at: http://localhost:${port}`);
+//     });
+
+//     // Fetch and save data every 2 hours
+//     fetchAndSaveTLEData(); // Initial call
+//     setInterval(fetchAndSaveTLEData, 2 * 60 * 60 * 1000); // Repeat every 2 hours
+//   })
+//   .catch((err) => {
+//     console.error('Error connecting to MongoDB:', err);
+//   });

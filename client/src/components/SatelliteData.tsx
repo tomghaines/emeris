@@ -25,7 +25,7 @@ const SatelliteData = () => {
   );
   const [satelliteData, setSatelliteData] = useState<Satellite[]>([]);
   const [loading, setLoading] = useState(true);
-  const useMockData = true; // ! Change to switch data source
+  const useMockData = false; // ! Change to switch data source
 
   useEffect(() => {
     const fetchDataFromService = async () => {

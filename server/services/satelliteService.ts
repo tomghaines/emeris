@@ -137,3 +137,5 @@ export const convertTLEData = (
 };
 
 // convertTLEData(lineOne, lineTwo);
+
+// satelliteService.ts
