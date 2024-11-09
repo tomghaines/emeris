@@ -11,6 +11,7 @@ const satelliteSchema = new mongoose.Schema({
   elevation: Number,
   rangeSat: Number,
   doppler: Number,
+  lastUpdateTimestamp: { type: Date, required: true },
 });
 
 export default mongoose.model('Satellite', satelliteSchema);
