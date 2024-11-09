@@ -5,7 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import { useEffect } from 'react';
 
 interface Satellite {
-  satelliteId: number;
+  _id: string;
   name: string;
   date: string;
   longitudeDeg: number;
@@ -20,8 +20,8 @@ interface Satellite {
 interface MapProps {
   satelliteData: Satellite[];
   loading: boolean;
-  selectedSatelliteId: number | null;
-  onSatelliteSelect: (id: number | null) => void;
+  selectedSatelliteId: string | null;
+  onSatelliteSelect: (id: string | null) => void;
 }
 
 const Map: React.FC<MapProps> = ({
@@ -45,25 +45,25 @@ const Map: React.FC<MapProps> = ({
       satellite.longitudeDeg !== undefined
   );
 
-  // Handle centering the map on a selected satellite
+  // Handle centering on marker on a selected satellite
   const CenterMapOnSelectedSatellite = () => {
     const map = useMap();
 
     useEffect(() => {
       if (selectedSatelliteId !== null) {
         const selectedSatellite = filteredSatellites.find(
-          (sat) => sat.satelliteId === selectedSatelliteId
+          (sat) => sat._id === selectedSatelliteId
         );
         if (selectedSatellite) {
           map.setView(
             [selectedSatellite.latitudeDeg, selectedSatellite.longitudeDeg],
-            3
+            2
           );
         }
       }
     });
 
-    return null; // Doesn’t render anything on the map
+    return null;
   };
 
   return (
@@ -81,15 +81,15 @@ const Map: React.FC<MapProps> = ({
         attribution="&copy; MapTiler &copy; OpenStreetMap contributors"
       />
       {filteredSatellites.map((satellite) => {
-        const { latitudeDeg, longitudeDeg, satelliteId } = satellite;
+        const { latitudeDeg, longitudeDeg, _id } = satellite;
 
         if (latitudeDeg !== undefined && longitudeDeg !== undefined) {
           return (
             <Marker
-              key={satelliteId}
+              key={_id}
               position={[latitudeDeg, longitudeDeg]}
               eventHandlers={{
-                click: () => onSatelliteSelect(satellite.satelliteId),
+                click: () => onSatelliteSelect(satellite._id),
               }}
             >
               <Popup>

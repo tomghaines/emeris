@@ -1,7 +1,7 @@
 import TableCol from './TableCol';
 
 interface Satellite {
-  satelliteId: number;
+  _id: string;
   name: string;
   date: string;
   longitudeDeg: number;
@@ -16,8 +16,8 @@ interface Satellite {
 interface SatelliteProps {
   satelliteData: Satellite[];
   loading: boolean;
-  selectedSatelliteId: number | null;
-  onSatelliteSelect: (id: number | null) => void;
+  selectedSatelliteId: string | null;
+  onSatelliteSelect: (id: string | null) => void;
 }
 
 const MainTable: React.FC<SatelliteProps> = ({
@@ -64,17 +64,15 @@ const MainTable: React.FC<SatelliteProps> = ({
         {filteredSatellites.length > 0 ? (
           filteredSatellites.map((satellite: Satellite) => (
             <div
-              key={satellite.satelliteId}
+              key={satellite._id}
               className={`flex justify-between items-center self-stretch rounded-md bg-neutral-950 ${
-                satellite.satelliteId === selectedSatelliteId
-                  ? 'bg-blue-500' // Add style for selected row
-                  : ''
+                satellite._id === selectedSatelliteId ? 'bg-blue-500' : ''
               }`}
-              onClick={() => onSatelliteSelect(satellite.satelliteId)}
+              onClick={() => onSatelliteSelect(satellite._id)}
             >
               {Object.values(satellite).map((value, index) => (
                 <TableCol
-                  key={`${satellite.satelliteId}-${index}`}
+                  key={`${satellite._id}-${index}`}
                   type="data"
                   data={value.toString()}
                 />
