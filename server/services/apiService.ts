@@ -34,7 +34,7 @@ export const fetchAndSaveTLEData = async () => {
             elevation: satelliteInfo.elevation,
             rangeSat: satelliteInfo.rangeSat,
             doppler: satelliteInfo.doppler,
-            lastUpdateTimeStamp: new Date(),
+            lastUpdateTimestamp: new Date(),
           };
 
           // Save each satellite to db
