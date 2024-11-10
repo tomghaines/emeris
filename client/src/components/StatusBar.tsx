@@ -23,8 +23,9 @@ const StatusBar: React.FC<StatusBarProps> = ({ satelliteData, loading }) => {
   const fmtDate = format(date, 'dd-MM-yyyy');
   const fmtTime = format(date, 'HH:mm');
 
-  const totalSatellites = satelliteData.length;
-  const trackedSatellites = satelliteData.filter(
+  const satellites = satelliteData?.satellites || [];
+  const totalSatellites = satellites.length;
+  const trackedSatellites = satellites.filter(
     (satellite) =>
       satellite.latitudeDeg !== undefined &&
       satellite.longitudeDeg !== undefined

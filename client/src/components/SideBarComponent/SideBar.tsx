@@ -35,8 +35,8 @@ const SideBar = ({
       </div>
     );
   }
-
-  const filteredSatellites = satelliteData.filter(
+  const satellites = satelliteData?.satellites || [];
+  const filteredSatellites = satellites.filter(
     (satellite) =>
       satellite.latitudeDeg !== undefined &&
       satellite.longitudeDeg !== undefined

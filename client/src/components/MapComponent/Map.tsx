@@ -39,8 +39,9 @@ const Map: React.FC<MapProps> = ({
   const mapKey = import.meta.env.VITE_MAPTILER_API_KEY;
 
   if (loading) return <div>Loading map...</div>;
-
-  const filteredSatellites = satelliteData.filter(
+  console.log(satelliteData);
+  const satellites = satelliteData?.satellites || [];
+  const filteredSatellites = satellites.filter(
     (satellite) =>
       satellite.latitudeDeg !== undefined &&
       satellite.longitudeDeg !== undefined
