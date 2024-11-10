@@ -7,10 +7,12 @@ interface Satellite {
   longitudeDeg: number;
   latitudeDeg: number;
   height: number;
+  velocity: number;
   azimuth: number;
   elevation: number;
   rangeSat: number;
   doppler: number;
+  heading: number;
 }
 
 interface SideBarProps {
@@ -76,31 +78,81 @@ const SideBar = ({
 
               {openSatDropdown === satellite._id && (
                 <div className="satellite-details p-2 bg-neutral-800 mt-2 rounded-md">
-                  <p>
+                  {/* <p>
                     <strong>Date:</strong> {satellite.date}
+                  </p> */}
+                  <p>
+                    <strong>Velocity:</strong>{' '}
+                    {JSON.stringify(satellite.velocity.toFixed(3)).replace(
+                      /"([^"]+)"/g,
+                      '$1'
+                    )}{' '}
+                    km/s
                   </p>
                   <p>
-                    <strong>Height:</strong> {satellite.height} km
+                    <strong>Altitude:</strong>{' '}
+                    {JSON.stringify(satellite.height.toFixed(3)).replace(
+                      /"([^"]+)"/g,
+                      '$1'
+                    )}{' '}
+                    km
                   </p>
                   <p>
                     <strong>Latitude:</strong>{' '}
-                    {parseFloat(satellite.latitudeDeg).toFixed(3)}°
+                    {JSON.stringify(satellite.latitudeDeg.toFixed(3)).replace(
+                      /"([^"]+)"/g,
+                      '$1'
+                    )}
+                    °
                   </p>
                   <p>
                     <strong>Longitude:</strong>{' '}
-                    {parseFloat(satellite.longitudeDeg).toFixed(3)}°
+                    {JSON.stringify(satellite.longitudeDeg.toFixed(3)).replace(
+                      /"([^"]+)"/g,
+                      '$1'
+                    )}
+                    °
+                  </p>
+
+                  <p>
+                    <strong>Heading:</strong>{' '}
+                    {JSON.stringify(satellite.heading.toFixed(3)).replace(
+                      /"([^"]+)"/g,
+                      '$1'
+                    )}
+                    °
                   </p>
                   <p>
-                    <strong>Azimuth:</strong> {satellite.azimuth}°
+                    <strong>Azimuth:</strong>{' '}
+                    {JSON.stringify(satellite.azimuth.toFixed(3)).replace(
+                      /"([^"]+)"/g,
+                      '$1'
+                    )}
+                    °
+                  </p>
+                  {/* <p>
+                    <strong>Elevation:</strong>{' '}
+                    {JSON.stringify(satellite.elevation.toFixed(3)).replace(
+                      /"([^"]+)"/g,
+                      '$1'
+                    )}
+                    °
+                  </p> */}
+                  <p>
+                    <strong>Range:</strong>{' '}
+                    {JSON.stringify(satellite.rangeSat.toFixed(3)).replace(
+                      /"([^"]+)"/g,
+                      '$1'
+                    )}{' '}
+                    km
                   </p>
                   <p>
-                    <strong>Elevation:</strong> {satellite.elevation}°
-                  </p>
-                  <p>
-                    <strong>Range:</strong> {satellite.rangeSat} km
-                  </p>
-                  <p>
-                    <strong>Doppler:</strong> {satellite.doppler} Hz
+                    <strong>Doppler:</strong>{' '}
+                    {JSON.stringify(satellite.doppler.toFixed(3)).replace(
+                      /"([^"]+)"/g,
+                      '$1'
+                    )}{' '}
+                    Hz
                   </p>
                 </div>
               )}

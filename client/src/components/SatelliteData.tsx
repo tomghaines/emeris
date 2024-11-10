@@ -13,10 +13,12 @@ interface Satellite {
   longitudeDeg: number;
   latitudeDeg: number;
   height: number;
+  velocity: number;
   azimuth: number;
   elevation: number;
   rangeSat: number;
   doppler: number;
+  heading: number;
   lastUpdateTimestamp: string;
 }
 
@@ -66,12 +68,19 @@ const SatelliteData = () => {
             ...satellite,
             latitudeDeg: simulatedPosition.latitude,
             longitudeDeg: simulatedPosition.longitude,
+            height: simulatedPosition.height,
+            velocity: simulatedPosition.velocity,
+            elevation: simulatedPosition.elevation,
+            azimuth: simulatedPosition.azimuth,
+            doppler: simulatedPosition.doppler,
+            rangeSat: simulatedPosition.rangeSat,
+            heading: simulatedPosition.heading,
           };
         });
         console.log('Simulated Data After Update:', updatedData);
         return updatedData;
       });
-    }, 1000);
+    }, 1500);
 
     return () => clearInterval(interval);
   }, [lastUpdateTimestamp, satelliteData]);

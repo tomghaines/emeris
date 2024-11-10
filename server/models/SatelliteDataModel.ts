@@ -7,10 +7,12 @@ const satelliteSchema = new mongoose.Schema({
   longitudeDeg: Number,
   latitudeDeg: Number,
   height: Number,
+  velocity: Number,
   azimuth: Number,
   elevation: Number,
   rangeSat: Number,
   doppler: Number,
+  heading: Number,
   lastUpdateTimestamp: { type: Date, required: true },
 });
 

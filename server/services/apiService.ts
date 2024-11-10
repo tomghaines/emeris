@@ -30,10 +30,12 @@ export const fetchAndSaveTLEData = async () => {
             latitudeDeg: satelliteInfo.latitudeDeg,
             longitudeDeg: satelliteInfo.longitudeDeg,
             height: satelliteInfo.height,
+            velocity: satelliteInfo.velocity,
             azimuth: satelliteInfo.azimuth,
             elevation: satelliteInfo.elevation,
             rangeSat: satelliteInfo.rangeSat,
             doppler: satelliteInfo.doppler,
+            heading: satelliteInfo.heading,
             lastUpdateTimestamp: new Date(),
           };
 

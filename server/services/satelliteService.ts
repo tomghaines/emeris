@@ -18,17 +18,13 @@ export interface SatelliteData {
   latitudeDeg: number;
   longitudeDeg: number;
   height: number;
+  velocity: number;
   elevation: number;
   doppler: number;
   azimuth: number;
   rangeSat: number;
+  heading: number;
 }
-
-// Sample TLEs
-// const lineOne =
-//   '1 25544U 98067A   19156.50900463  .00003075  00000-0  59442-4 0  9992';
-// const lineTwo =
-//   '2 25544  51.6433  59.2583 0008217  16.4489 347.6017 15.51174618173442';
 
 export const convertTLEData = (
   tleLineOne: string,
@@ -37,13 +33,10 @@ export const convertTLEData = (
   // New satellite record
   const satrec = twoline2satrec(tleLineOne, tleLineTwo);
 
-  // console.log('Satellite record:', satrec);
-
   // Get current epoch for satellite
   const epoch = new Date();
-  // console.log('Epoch:', epoch);
 
-  // Convert date object to julian date
+  // Convert date object to Julian date
   function getJulianDate(date: Date): number {
     const year = date.getUTCFullYear();
     const month = date.getUTCMonth() + 1;
@@ -70,7 +63,6 @@ export const convertTLEData = (
 
   // Convert epoch to Julian date
   const jd = getJulianDate(epoch);
-  // console.log('Julian Date:', jd);
 
   // Calculate position and velocity
   const positionAndVelocity: PositionAndVelocity = sgp4(satrec, jd);
@@ -82,60 +74,54 @@ export const convertTLEData = (
     const positionECI = positionAndVelocity.position as EciVec3<number>;
     const velocityECI = positionAndVelocity.velocity as EciVec3<number>;
 
-    // Convert degrees to radians for observer location (Example coordinates)
+    // Extract velocity components
+    const velocityMagnitude = Math.sqrt(
+      Math.pow(velocityECI.x, 2) +
+        Math.pow(velocityECI.y, 2) +
+        Math.pow(velocityECI.z, 2)
+    );
+
+    // Heading (direction of velocity) in degrees
+    const heading = Math.atan2(velocityECI.y, velocityECI.x) * (180 / Math.PI);
+
+    // Observer location (example)
     const observerGround = {
-      longitude: degreesToRadians(-122.0308), // Convert this to user location later
-      latitude: degreesToRadians(36.9613422), // Convert this to user location later
-      height: 0.37, // Convert this to user location later
+      longitude: degreesToRadians(-122.0308),
+      latitude: degreesToRadians(36.9613422),
+      height: 0.37,
     };
 
-    // Greenwich Mean Sidereal Time (GMST) to bridge between ECI & ECF position calculations
+    // Greenwich Mean Sidereal Time (GMST)
     const gmst = gstime(new Date());
 
-    // ECF calculations to find satellite's position relative to the Earth's surface (NOT ECI)
+    // ECF calculations for satellite's position
     const positionECF = eciToEcf(positionECI, gmst);
     const observerECF = geodeticToEcf(observerGround);
     const positionGround = eciToGeodetic(positionECI, gmst);
 
-    // Calculate Look Angles and Doppler Factor
+    // Look Angles and Doppler
     const lookAngles = ecfToLookAngles(observerGround, positionECF);
     const doppler = dopplerFactor(observerECF, positionECF, velocityECI);
 
-    // Look Angles
-    const azimuth = lookAngles.azimuth;
-    const elevation = lookAngles.elevation;
-    const rangeSat = lookAngles.rangeSat;
-
-    // Geodetic coordinates
+    // Extracting satellite's position
     const longitude = positionGround.longitude;
     const latitude = positionGround.latitude;
     const height = positionGround.height;
 
-    // Convert radians to degrees
+    // Convert to degrees
     const longitudeDeg = degreesLong(longitude);
     const latitudeDeg = degreesLat(latitude);
-
-    // console.log('Longitude (degrees):', longitudeDeg);
-    // console.log('Latitude (degrees):', latitudeDeg);
-    // console.log('Height (km):', height);
-    // console.log('Azimuth:', azimuth);
-    // console.log('Elevation:', elevation);
-    // console.log('Range (km):', rangeSat);
-    // console.log('Doppler Factor:', doppler);
 
     return {
       latitudeDeg: parseFloat(latitudeDeg.toFixed(3)),
       longitudeDeg: parseFloat(longitudeDeg.toFixed(3)),
       height: parseFloat(height.toFixed(3)),
-      elevation: parseFloat(elevation.toFixed(3)),
+      elevation: parseFloat(lookAngles.elevation.toFixed(3)),
       doppler: parseFloat(doppler.toFixed(3)),
-      azimuth: parseFloat(azimuth.toFixed(3)),
-      rangeSat: parseFloat(rangeSat.toFixed(3)),
+      azimuth: parseFloat(lookAngles.azimuth.toFixed(3)),
+      rangeSat: parseFloat(lookAngles.rangeSat.toFixed(3)),
+      velocity: parseFloat(velocityMagnitude.toFixed(3)),
+      heading: parseFloat(heading.toFixed(3)),
     };
   }
-  // console.log(result);
 };
-
-// convertTLEData(lineOne, lineTwo);
-
-// satelliteService.ts
