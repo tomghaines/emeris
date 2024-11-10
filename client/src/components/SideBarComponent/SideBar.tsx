@@ -35,7 +35,9 @@ const SideBar = ({
       </div>
     );
   }
-  const satellites = satelliteData?.satellites || [];
+
+  // Make sure data is structured correctly
+  const satellites = satelliteData || [];
   const filteredSatellites = satellites.filter(
     (satellite) =>
       satellite.latitudeDeg !== undefined &&
@@ -81,10 +83,12 @@ const SideBar = ({
                     <strong>Height:</strong> {satellite.height} km
                   </p>
                   <p>
-                    <strong>Latitude:</strong> {satellite.latitudeDeg}°
+                    <strong>Latitude:</strong>{' '}
+                    {parseFloat(satellite.latitudeDeg).toFixed(3)}°
                   </p>
                   <p>
-                    <strong>Longitude:</strong> {satellite.longitudeDeg}°
+                    <strong>Longitude:</strong>{' '}
+                    {parseFloat(satellite.longitudeDeg).toFixed(3)}°
                   </p>
                   <p>
                     <strong>Azimuth:</strong> {satellite.azimuth}°
