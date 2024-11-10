@@ -5,11 +5,14 @@ import { convertTLEData } from './satelliteService';
 
 const celestrakAPI =
   'https://celestrak.org/NORAD/elements/gp.php?GROUP=active&FORMAT=tle';
+
+const OneHundredOrSoBrightest =
+  'https://celestrak.org/NORAD/elements/gp.php?GROUP=visual&FORMAT=tle';
 const MAX_SATELLITES = 250; // Set limit
 
 export const fetchAndSaveTLEData = async () => {
   try {
-    const response = await axios.get<string>(celestrakAPI);
+    const response = await axios.get<string>(OneHundredOrSoBrightest);
     const rawData = response.data
       .split('\n')
       .map((line) => line.trim())
