@@ -34,7 +34,7 @@ const StatusBar: React.FC<StatusBarProps> = ({ satelliteData, loading }) => {
 
   return (
     <>
-      <div className="flex flex-row items-center justify-between py-1 px-4 bg-neutral-900">
+      <div className=" flex flex-row items-center justify-between py-1 px-4 bg-neutral-900">
         <div>LOGO</div>
         <div className="flex flex-row items-center text-right gap-5">
           <div>Total: {totalSatellites}</div>

@@ -1,5 +1,6 @@
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { LatLngExpression } from 'leaflet';
+import L from 'leaflet';
 import { useEffect, useMemo } from 'react';
 import './map.css';
 import 'leaflet/dist/leaflet.css';
@@ -27,6 +28,14 @@ const Map: React.FC<MapProps> = ({
   const center: LatLngExpression = [25, 0];
   const zoom = 2;
   const mapKey = import.meta.env.VITE_MAPTILER_API_KEY;
+
+  const customIcon = new L.icon({
+    iconUrl: '../../../public/icons/map/orangesat.png',
+    iconSize: [34, 34],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32],
+    opacity: 0.5,
+  });
 
   if (loading) return <div>Loading map...</div>;
 
@@ -68,9 +77,17 @@ const Map: React.FC<MapProps> = ({
       {satelliteData.map((satellite) => (
         <Marker
           key={satellite._id}
+          icon={customIcon}
           position={[satellite.latitudeDeg, satellite.longitudeDeg]}
           eventHandlers={{
             click: () => onSatelliteSelect(satellite._id),
+
+            mouseover: (e) => {
+              e.target.setOpacity(0.5);
+            },
+            mouseout: (e) => {
+              e.target.setOpacity(1);
+            },
           }}
         >
           <Popup>

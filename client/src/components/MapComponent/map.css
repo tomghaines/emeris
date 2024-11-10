@@ -9,3 +9,28 @@
   width: 100%;
   height: 100%;
 }
+
+/* Custom popup styles */
+.leaflet-popup-content {
+  background-color: #f0f0f0; /* Light grey background */
+  color: #333; /* Dark text color */
+  font-family: Arial, sans-serif; /* Set font */
+  padding: 10px; /* Padding around the content */
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+}
+
+/* Styling the popup header (if you have a header) */
+.leaflet-popup-content strong {
+  font-size: 18px; /* Larger font size for name */
+  color: #0056b3; /* Dark blue color */
+}
+
+/* Optional: Style the popup’s close button */
+.leaflet-popup-close-button {
+  background-color: #ff5722; /* Orange close button */
+  color: white;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+}

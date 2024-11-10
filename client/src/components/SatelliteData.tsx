@@ -97,7 +97,7 @@ const SatelliteData = () => {
 
   return (
     <div className="flex h-screen">
-      <div className="border-2 border-neutral-900 fixed top-0 z-10 w-full">
+      <div className="border-2 border-neutral-900 fixed top-0 z-10 w-full opacity-0">
         <StatusBar satelliteData={satelliteData} loading={loading} />
       </div>
       <div className="flex flex-col h-full w-3/4 overflow-hidden">
@@ -110,7 +110,7 @@ const SatelliteData = () => {
           />
         </div>
       </div>
-      <div className="border-2 border-neutral-900 w-1/4 overflow-hidden">
+      <div className="w-1/4 overflow-hidden">
         <SideBar
           satelliteData={simulatedSatelliteData}
           loading={loading}
