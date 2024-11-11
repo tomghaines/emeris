@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { LatLngExpression } from 'leaflet';
 import L from 'leaflet';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import './map.css';
 import 'leaflet/dist/leaflet.css';
 
@@ -17,6 +17,7 @@ interface MapProps {
   loading: boolean;
   selectedSatelliteId: string | null;
   onSatelliteSelect: (id: string | null) => void;
+  satelliteRefs: React.RefObject<{ [key: string]: HTMLDivElement | null }>;
 }
 
 const Map: React.FC<MapProps> = ({
@@ -24,15 +25,17 @@ const Map: React.FC<MapProps> = ({
   loading,
   selectedSatelliteId,
   onSatelliteSelect,
+  satelliteRefs,
 }) => {
   const center: LatLngExpression = [25, 0];
   const zoom = 2;
   const mapKey = import.meta.env.VITE_MAPTILER_API_KEY;
+  const mapRef = useRef(null);
 
   const customIcon = new L.icon({
-    iconUrl: '../../../public/icons/map/orangesat.png',
-    iconSize: [34, 34],
-    iconAnchor: [16, 32],
+    iconUrl: '../../../public/icons/map/sidebar/menudotg.png',
+    iconSize: [20, 20],
+    iconAnchor: [0, 0],
     popupAnchor: [0, -32],
     opacity: 0.5,
   });
@@ -40,24 +43,37 @@ const Map: React.FC<MapProps> = ({
   if (loading) return <div>Loading map...</div>;
 
   // Function to center map on a selected satellite
-  const CenterMapOnSelectedSatellite = () => {
-    const map = useMap();
+  // const CenterMapOnSelectedSatellite = () => {
+  //   const map = useMap();
 
-    // Optimize satellite lookup
-    const selectedSatellite = useMemo(() => {
-      return satelliteData.find((sat) => sat._id === selectedSatelliteId);
-    }, [selectedSatelliteId, satelliteData]);
+  //   // Optimize satellite lookup
+  //   const selectedSatellite = useMemo(() => {
+  //     return satelliteData.find((sat) => sat._id === selectedSatelliteId);
+  //   }, [selectedSatelliteId, satelliteData]);
 
-    useEffect(() => {
-      if (selectedSatellite) {
-        map.setView(
-          [selectedSatellite.latitudeDeg, selectedSatellite.longitudeDeg],
-          map.getZoom()
-        );
-      }
-    }, [selectedSatellite, map]);
+  //   useEffect(() => {
+  //     if (selectedSatellite) {
+  //       map.setView(
+  //         [selectedSatellite.latitudeDeg, selectedSatellite.longitudeDeg],
+  //         map.getZoom()
+  //       );
+  //     }
+  //   }, [selectedSatellite, map]);
 
-    return null;
+  //   return null;
+  // };
+
+  // Function to handle map clicks and select the satellite from the map
+  const handleMapClick = (e: any) => {
+    const { lat, lng } = e.latlng; // Get the coordinates of the clicked position
+    const clickedSatellite = satelliteData.find(
+      (satellite) =>
+        satellite.latitudeDeg === lat && satellite.longitudeDeg === lng
+    );
+
+    if (clickedSatellite) {
+      onSatelliteSelect(clickedSatellite._id); // Update the sidebar and trigger scrolling
+    }
   };
 
   return (
@@ -68,8 +84,9 @@ const Map: React.FC<MapProps> = ({
       maxZoom={12}
       style={{ height: '100%', width: '100%' }}
       zoomControl={false}
+      onClick={handleMapClick} // Listen to the map click event
     >
-      <CenterMapOnSelectedSatellite />
+      {/* <CenterMapOnSelectedSatellite /> */}
       <TileLayer
         url={`https://api.maptiler.com/maps/backdrop-dark/{z}/{x}/{y}.png?key=${mapKey}`}
         attribution="&copy; MapTiler &copy; OpenStreetMap contributors"
@@ -80,8 +97,7 @@ const Map: React.FC<MapProps> = ({
           icon={customIcon}
           position={[satellite.latitudeDeg, satellite.longitudeDeg]}
           eventHandlers={{
-            click: () => onSatelliteSelect(satellite._id),
-
+            click: () => onSatelliteSelect(satellite._id), // Update sidebar when a marker is clicked
             mouseover: (e) => {
               e.target.setOpacity(0.5);
             },

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Map from './MapComponent/Map';
 import { getSatelliteData } from '../services/satelliteAPI';
 import StatusBar from './StatusBar';
@@ -10,19 +10,21 @@ interface Satellite {
   satelliteId: number;
   name: string;
   date: string;
-  longitudeDeg: number;
-  latitudeDeg: number;
-  height: number;
   velocity: number;
+  height: number;
+  longitudeDeg: number | undefined;
+  latitudeDeg: number | undefined;
+  heading: number;
   azimuth: number;
   elevation: number;
   rangeSat: number;
   doppler: number;
-  heading: number;
+
   lastUpdateTimestamp: string;
 }
 
 const SatelliteData = () => {
+  const satelliteRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const [selectedSatelliteId, setSelectedSatelliteId] = useState<string | null>(
     null
   );
@@ -83,7 +85,7 @@ const SatelliteData = () => {
     }, 1500);
 
     return () => clearInterval(interval);
-  }, [lastUpdateTimestamp, satelliteData]);
+  }, [satelliteData, lastUpdateTimestamp]);
 
   if (loading || satelliteData.length === 0) {
     return (
@@ -96,26 +98,31 @@ const SatelliteData = () => {
   }
 
   return (
-    <div className="flex h-screen">
-      <div className="border-2 border-neutral-900 fixed top-0 z-10 w-full opacity-0">
-        <StatusBar satelliteData={satelliteData} loading={loading} />
-      </div>
-      <div className="flex flex-col h-full w-3/4 overflow-hidden">
-        <div className="border-2 border-neutral-900 h-full z-0">
+    <div className="flex h-screen p-2 gap-2  bg-[#0e0e0e]">
+      <div className="flex flex-col h-full w-3/4 relative">
+        <div className="top-0 z-10 absolute m-3 rounded-md">
+          <StatusBar satelliteData={satelliteData} loading={loading} />
+        </div>
+        <div className="h-full z-0 overflow-hidden p-0 bg-[#02050A] rounded-lg">
           <Map
-            satelliteData={satelliteData}
+            satelliteData={simulatedSatelliteData}
             loading={loading}
             selectedSatelliteId={selectedSatelliteId}
             onSatelliteSelect={setSelectedSatelliteId}
+            satelliteRefs={satelliteRefs}
           />
         </div>
       </div>
-      <div className="w-1/4 overflow-hidden">
+      <div
+        className="w-1/4 overflow-hidden p-0 bg-[#02050A] rounded-lg
+      "
+      >
         <SideBar
           satelliteData={simulatedSatelliteData}
           loading={loading}
           selectedSatelliteId={selectedSatelliteId}
           onSatelliteSelect={setSelectedSatelliteId}
+          satelliteRefs={satelliteRefs}
         />
       </div>
     </div>
