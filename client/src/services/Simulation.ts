@@ -14,75 +14,98 @@ interface Satellite {
   heading: number;
   lastUpdateTimestamp: string;
 }
-
 const getSimulatedPosition = (
   satellite: Satellite,
   lastUpdateTimestamp: string
 ) => {
+  if (
+    satellite.velocity > 1e5 ||
+    satellite.height < 0 ||
+    Math.abs(satellite.latitudeDeg) > 90 ||
+    Math.abs(satellite.longitudeDeg) > 180 ||
+    isNaN(satellite.latitudeDeg) ||
+    isNaN(satellite.longitudeDeg) ||
+    isNaN(satellite.velocity) ||
+    isNaN(satellite.height) ||
+    isNaN(satellite.elevation) ||
+    isNaN(satellite.azimuth) ||
+    isNaN(satellite.rangeSat) ||
+    isNaN(satellite.doppler) ||
+    isNaN(satellite.heading)
+  ) {
+    console.error('Suspicious satellite data detected. Skipping simulation.');
+    return null;
+  }
+
+  // Calculate elapsed time in seconds
   const elapsedTime =
-    (Date.now() - new Date(lastUpdateTimestamp).getTime()) / 1000; // Convert ms to seconds
+    (Date.now() - new Date(lastUpdateTimestamp).getTime()) / 1000;
 
-  const velocityFluctuation = (Math.random() - 0.5) * 0.1; // ±10% variation in velocity
-  const simulatedVelocity = satellite.velocity + velocityFluctuation;
+  // Distance traveled based on velocity and elapsed time
+  const distanceTravelled = (satellite.velocity * elapsedTime) / 1000; // converting to km
 
-  const headingFluctuation = (Math.random() - 0.5) * 1; // ±1 degree variation in heading
-  const simulatedHeading = satellite.heading + headingFluctuation;
-
-  const normalizedHeading = ((simulatedHeading % 360) + 360) % 360;
-
-  const headingRadians = (normalizedHeading * Math.PI) / 180;
-
+  // Earth radius in kilometers
   const earthRadius = 6371;
 
-  const distanceTravelled = simulatedVelocity * elapsedTime;
+  // Convert fixed heading to radians
+  const headingRadians = (satellite.heading * Math.PI) / 180;
 
-  const deltaLatitude = (distanceTravelled / earthRadius) * (180 / Math.PI);
+  // Calculate changes in latitude and longitude using spherical trigonometry
+  const deltaLatitude =
+    (distanceTravelled / earthRadius) *
+    Math.cos(headingRadians) *
+    (180 / Math.PI);
+  const simulatedLatitude = satellite.latitudeDeg + deltaLatitude;
+
   const deltaLongitude =
-    ((distanceTravelled / earthRadius) * (180 / Math.PI)) /
-    Math.cos((satellite.latitudeDeg * Math.PI) / 180);
+    (distanceTravelled /
+      (earthRadius * Math.cos((simulatedLatitude * Math.PI) / 180))) *
+    Math.sin(headingRadians) *
+    (180 / Math.PI);
+  const simulatedLongitude = satellite.longitudeDeg + deltaLongitude;
 
-  // Calculate new latitude and longitude based on heading
-  const simulatedLatitude =
-    satellite.latitudeDeg + deltaLatitude * Math.cos(headingRadians);
-  const simulatedLongitude =
-    satellite.longitudeDeg + deltaLongitude * Math.sin(headingRadians);
+  // Normalize latitude and longitude within valid ranges
+  const normalizedLatitude = Math.max(-90, Math.min(90, simulatedLatitude));
+  const normalizedLongitude =
+    ((((simulatedLongitude + 180) % 360) + 360) % 360) - 180;
 
-  // Simulate height with random fluctuation within ±10 meters
-  const heightFluctuation = (Math.random() - 0.5) * 20; // ±10 meters
+  // Adding minor fluctuations to other attributes as previously
+  const heightFluctuation = (Math.random() - 0.5) * 20;
   const simulatedHeight = satellite.height + heightFluctuation;
 
-  const azimuthRotationRate = 0.1; // Degrees per second
-  const azimuthFluctuation = (Math.random() - 0.5) * 2; // ±1 degree
+  const velocityFluctuation = (Math.random() - 0.5) * 0.1 * satellite.velocity;
+  const simulatedVelocity = satellite.velocity + velocityFluctuation;
+
+  const azimuthRotationRate = 0.1;
+  const azimuthFluctuation = (Math.random() - 0.5) * 2;
   const simulatedAzimuth =
     (satellite.azimuth +
       azimuthRotationRate * elapsedTime +
       azimuthFluctuation) %
     360;
 
-  const elevationFluctuation = (Math.random() - 0.5) * 1; // ±0.5 degrees
+  const elevationFluctuation = (Math.random() - 0.5) * 1;
   const simulatedElevation = Math.max(
     0,
-    satellite.elevation +
-      Math.sin(elapsedTime * 0.1) * 0.05 +
-      elevationFluctuation
+    satellite.elevation + elevationFluctuation
   );
 
-  const rangeFluctuation = (Math.random() - 0.5) * 100; // ±50 meters
+  const rangeFluctuation = (Math.random() - 0.5) * 100;
   const simulatedRange = satellite.rangeSat + rangeFluctuation;
 
-  const dopplerFluctuation = (Math.random() - 0.5) * 0.4; // ±0.2 Hz
+  const dopplerFluctuation = (Math.random() - 0.5) * 0.4;
   const simulatedDoppler = satellite.doppler + dopplerFluctuation;
 
   return {
-    latitude: simulatedLatitude,
-    longitude: simulatedLongitude,
-    height: simulatedHeight,
     velocity: simulatedVelocity,
+    height: simulatedHeight,
+    latitude: normalizedLatitude,
+    longitude: normalizedLongitude,
+    heading: satellite.heading, // No fluctuation - fixed heading
     azimuth: simulatedAzimuth,
     elevation: simulatedElevation,
     rangeSat: simulatedRange,
     doppler: simulatedDoppler,
-    heading: normalizedHeading,
   };
 };
 
