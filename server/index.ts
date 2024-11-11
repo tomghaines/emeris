@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import router from './router';
-import { fetchAndSaveTLEData } from './services/apiService';
+// import { fetchAndSaveTLEData } from './services/apiService';
 
 const app = express();
 const port = 3000;
@@ -14,7 +14,6 @@ app.use(router);
 
 // ! Use only for development -> manually fetch and save data with: 'curl http://localhost:3000/fetch-tle'
 
-// Connect to MongoDB and start server
 mongoose
   .connect(mongoUri)
   .then(() => {
@@ -27,9 +26,8 @@ mongoose
     console.error('Error connecting to MongoDB:', err);
   });
 
-// ! Uuse for production -> auto fectching api data:
+// ! Use to automatically fetch api data, every 2 hours:
 
-// // Connect to MongoDB and start server
 // mongoose
 //   .connect(mongoUri)
 //   .then(() => {
@@ -38,7 +36,7 @@ mongoose
 //       console.log(`Server is running at: http://localhost:${port}`);
 //     });
 
-//     // Fetch and save data every 2 hours
+// // Fetch and save data every 2 hours
 //     fetchAndSaveTLEData(); // Initial call
 //     setInterval(fetchAndSaveTLEData, 2 * 60 * 60 * 1000); // Repeat every 2 hours
 //   })

@@ -15,7 +15,8 @@
     "date-fns": "^4.1.0",
     "express": "^4.21.1",
     "mongoose": "^8.8.1",
-    "satellite.js": "^5.0.0"
+    "satellite.js": "^5.0.0",
+    "tle": "^3.0.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

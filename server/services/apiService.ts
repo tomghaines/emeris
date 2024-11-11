@@ -8,11 +8,17 @@ const celestrakAPI =
 
 const OneHundredOrSoBrightest =
   'https://celestrak.org/NORAD/elements/gp.php?GROUP=visual&FORMAT=tle';
+
+const spaceStations =
+  'https://celestrak.org/NORAD/elements/gp.php?GROUP=stations&FORMAT=tle';
+
+const starlink =
+  'https://celestrak.org/NORAD/elements/gp.php?GROUP=starlink&FORMAT=tle';
 const MAX_SATELLITES = 250; // Set limit
 
 export const fetchAndSaveTLEData = async () => {
   try {
-    const response = await axios.get<string>(OneHundredOrSoBrightest);
+    const response = await axios.get<string>(starlink);
     const rawData = response.data
       .split('\n')
       .map((line) => line.trim())
