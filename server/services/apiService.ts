@@ -14,7 +14,7 @@ const spaceStations =
 
 const starlink =
   'https://celestrak.org/NORAD/elements/gp.php?GROUP=starlink&FORMAT=tle';
-const MAX_SATELLITES = 250; // Set limit
+const MAX_SATELLITES = 500; // Set limit
 
 export const fetchAndSaveTLEData = async () => {
   try {
