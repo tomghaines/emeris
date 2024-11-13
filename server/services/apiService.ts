@@ -16,9 +16,12 @@ const starlink =
   'https://celestrak.org/NORAD/elements/gp.php?GROUP=starlink&FORMAT=tle';
 const MAX_SATELLITES = 500; // Set limit
 
+const weatherSatellites =
+  'https://celestrak.org/NORAD/elements/gp.php?GROUP=weather&FORMAT=tle';
+
 export const fetchAndSaveTLEData = async () => {
   try {
-    const response = await axios.get<string>(starlink);
+    const response = await axios.get<string>(weatherSatellites);
     const rawData = response.data
       .split('\n')
       .map((line) => line.trim())
